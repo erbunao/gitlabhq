@@ -6,24 +6,32 @@
     })
     return md_links;
   }
+
+  function deletePreviewLink() {
+    $('.dz-preview').ready(function() {
+      alert(1);
+      $(this).remove();
+    });
+  }
+
   $(document).ready(function() { 
     $('textarea.markdown-area').wrap('<div class="div-dropzone"></div>');
 
     $('.div-dropzone').append('<div class="div-dropzone-hover"><i class="icon-picture div-dropzone-icon"></i></div>');
 
-    $('.div-dropzone').append('<div class="div-dropzone-error"><i class="icon-remove div-dropzone-icon-error"></i><div style="display:inline">Unsupported File Type</div></div>');
+    $('.div-dropzone').append('<div class="div-dropzone-error"><i class="icon-remove div-dropzone-icon-error"></i><div class="dropzone-error-message" style="display:inline">Unsupported File Type</div></div>');
 
     $('.div-dropzone').append('<div class="div-dropzone-spinner"><i class="icon-spinner icon-spin div-dropzone-icon"></i></div>');
 
     dz = $('.div-dropzone').dropzone({
       url: "#{upload_image_project_issues_path}",
-      dictDefaultMessage: "",
-      clickable: false,
-      paramName: "issue-imgs",
-      maxFilesize: 2,
+      dictDefaultMessage: '',
+      clickable: true,
+      paramName: 'issue-imgs',
+      maxFilesize: 10,
       uploadMultiple: true,
-      acceptedFiles: "image/jpg,image/jpeg,image/gif,image/png",
-      headers: { "X-CSRF-Token": $('meta[name="csrf-token"]').attr('content')},
+      acceptedFiles: 'image/jpg,image/jpeg,image/gif,image/png',
+      headers: { 'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
       
       success: function(header,response){
         var child = $(dz[0]).children('textarea');
@@ -31,6 +39,7 @@
       },
 
       error: function(temp, errorMessage) {
+        $('.dropzone-error-message').text(errorMessage);
         $('.div-dropzone-error').css('opacity', 0.7);
         $('.div-dropzone-error').delay(500).fadeTo("slow", 0);
       },
@@ -55,11 +64,13 @@
     });
 
     $('.div-dropzone').on('drop',function(){
-      $('.dz-preview').remove();
+      deletePreviewLink();
       $('.div-dropzone-hover').css('opacity',0);
     });
 
+    $('.markdown-selector').click(function(e) {
+      e.preventDefault;
+      $('.div-dropzone').click();
+      deletePreviewLink();
+    });
   });
-
-
-  
