@@ -1,34 +1,84 @@
 :javascript
-  function formatLinks(links) {
-    var md_links = [];
-    links.forEach(function (str) {
-      md_links.push('![' + str.alt + '](' + str.url + ')');
-    })
-    return md_links;
+  function formatLink(str) {
+    return '![' + str.alt + '](' + str.url + ')';
+  }
+
+  function handlePaste(e) {
+    filename = getdata(e);
+    e = e.originalEvent;
+    for (var i = 0; i < e.clipboardData.items.length; i++) {
+      var item = e.clipboardData.items[i];
+      if (item.type.indexOf("image") != -1) {
+        uploadFile(item.getAsFile(), filename);
+      }
+    }
+  }
+
+  function uploadFile(item, filename){
+    var formData = new FormData();
+    formData.append('issue-img', item, filename);
+
+    var xhr = new XMLHttpRequest();
+
+    xhr.upload.onprogress = function(e) {
+      var percentComplete = (e.loaded / e.total) * 100;
+    };
+
+    xhr.onload = function() {
+      if (xhr.status == 200) {
+        alert('Success!');
+      }
+      else {
+        alert('Failed!');
+      }
+    };
+
+    xhr.open('POST', "#{upload_image_project_issues_path}", true);
+    xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'));
+    xhr.send(formData);
+  }
+
+  function getdata(e) {
+    var value;
+    if(window.clipboardData && window.clipboardData.getData) {
+      value = window.clipboardData.getData('Text');
+    }
+    else if (e.originalEvent.clipboardData && e.originalEvent.clipboardData.getData) {
+      value = e.originalEvent.clipboardData.getData('text/plain');
+    }
+    return value;
   }
 
   $(document).ready(function() { 
     $('textarea.markdown-area').wrap('<div class="div-dropzone"></div>');
 
-    $('.div-dropzone').append('<div class="div-dropzone-hover"><i class="icon-picture div-dropzone-icon"></i></div>');
+    $('.div-dropzone').append('<div class="div-dropzone-hover">'
+       + '<i class="icon-picture div-dropzone-icon"></i>'
+       + '</div>');
 
-    $('.div-dropzone').append('<div class="div-dropzone-error"><i class="icon-remove div-dropzone-icon-error"></i><div class="dropzone-error-message" style="display:inline">Unsupported File Type</div></div>');
+    $('.div-dropzone').append('<div class="div-dropzone-error">'
+        + '<i class="icon-remove div-dropzone-icon-error"></i>'
+        + '<div class="dropzone-error-message" style="display:inline">'
+        + 'Unsupported File Type'
+        + '</div> </div>');
 
-    $('.div-dropzone').append('<div class="div-dropzone-spinner"><i class="icon-spinner icon-spin div-dropzone-icon"></i></div>');
+    $('.div-dropzone').append('<div class="div-dropzone-spinner">'
+      + '<i class="icon-spinner icon-spin div-dropzone-icon"></i>'
+      + '</div>');
 
     dz = $('.div-dropzone').dropzone({
       url: "#{upload_image_project_issues_path}",
       dictDefaultMessage: '',
       clickable: true,
-      paramName: 'issue-imgs',
+      paramName: 'issue-img',
       maxFilesize: 10,
-      uploadMultiple: true,
+      uploadMultiple: false,
       acceptedFiles: 'image/jpg,image/jpeg,image/gif,image/png',
       headers: { 'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
       
       success: function(header,response){
         var child = $(dz[0]).children('textarea');
-        $(child).val($(child).val() + formatLinks(response.links).join("\n") + "\n");
+        $(child).val($(child).val() + formatLink(response.link) + "\n");
       },
 
       error: function(temp, errorMessage) {
@@ -69,4 +119,7 @@
     $('.div-dropzone').bind('DOMNodeInserted', function() {
       $('.dz-preview').remove();
     });
+
+    $('.div-dropzone').on('paste', handlePaste);
+
   });
