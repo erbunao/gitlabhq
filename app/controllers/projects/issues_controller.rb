@@ -80,7 +80,7 @@ class Projects::IssuesController < Projects::ApplicationController
     @issue = Issues::UpdateService.new(project, current_user, params[:issue]).execute(issue)
 
     respond_to do |format|
-      format.js   
+      format.js
       format.html do
         if @issue.valid?
           redirect_to [@project, @issue]
@@ -97,13 +97,16 @@ class Projects::IssuesController < Projects::ApplicationController
   end
 
   def upload_image
-    @upload_path = File.join(project.namespace.path, @project.path)
-    @accepted_types = %w(png jpg jpeg gif)
-    uploader = FileUploader.new('uploads/' + @upload_path, @accepted_types)
+    @base_dir = FileUploader.generate_dir
+    upload_path = File.join(repository.path_with_namespace, 'issues', @base_dir)
+    accepted_types = %w(png jpg jpeg gif)
+    uploader = FileUploader.new('uploads', upload_path, accepted_types)
     links = []
     params['issue-imgs'].each do |img|
-      alt = uploader.store!(img)
-      links << {'alt' => File.basename(alt,'.*'), 'url' => File.join(root_url, uploader.url)}
+      alt = img.original_filename
+      uploader.store!(img)
+      links << { 'alt' => File.basename(alt, '.*'),
+                 'url' => File.join(root_url, uploader.url) }
     end
 
     respond_to do |format|
