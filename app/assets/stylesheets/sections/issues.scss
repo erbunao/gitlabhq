@@ -171,6 +171,14 @@ form.edit-issue {
 
 .div-dropzone {
   position: relative;
+  padding: 0;
+  border: 0;
+
+  .div-dropzone-focus {
+    border-color: #66afe9;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+    outline: 0;
+  }
 
   .div-dropzone-hover {
     position: absolute;
@@ -205,23 +213,18 @@ form.edit-issue {
     font-size: 30px;
     transition: opacity 200ms ease-in-out;
   }
-}
 
-.div-dropzone {
-  padding: 0;
-  border: 0;
-}
+  .div-dropzone-icon {
+    display: block;
+    text-align: center;
+    font-size: inherit;
+  }
 
-.div-dropzone-icon {
-  display: block;
-  text-align: center;
-  font-size: inherit;
-}
-
-.div-dropzone-icon-error {
-  display: inline;
-  text-align: center;
-  font-size: inherit;
+  .div-dropzone-icon-error {
+    display: inline;
+    text-align: center;
+    font-size: inherit;
+  }
 }
 
 .hint {
