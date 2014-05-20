@@ -5,16 +5,11 @@
 
   $(document).ready(function() { 
     $('textarea.markdown-area').wrap('<div class="div-dropzone"></div>');
+    $('.div-dropzone').parent().addClass('div-dropzone-wrapper');
 
     $('.div-dropzone').append('<div class="div-dropzone-hover">'
        + '<i class="icon-picture div-dropzone-icon"></i>'
        + '</div>');
-
-    $('.div-dropzone').append('<div class="div-dropzone-error">'
-        + '<i class="icon-remove div-dropzone-icon-error"></i>'
-        + '<div class="dropzone-error-message" style="display:inline">'
-        + 'Unsupported File Type'
-        + '</div> </div>');
 
     $('.div-dropzone').append('<div class="div-dropzone-spinner">'
       + '<i class="icon-spinner icon-spin div-dropzone-icon"></i>'
@@ -30,7 +25,7 @@
       acceptedFiles: 'image/jpg,image/jpeg,image/gif,image/png',
       headers: { 'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
       
-      dragover: function() {
+      dragover: function() {  
         $('.div-dropzone > textarea').addClass('div-dropzone-focus');
         $('.div-dropzone-hover').css('opacity',0.7);
       },
@@ -47,15 +42,18 @@
         $('.div-dropzone > textarea').focus();
       },
 
-      success: function(header, response){
+      success: function(header, response) {
+        $('.div-dropzone-alert').alert('close');
         var child = $(dz[0]).children('textarea');
         $(child).val($(child).val() + formatLink(response.link) + "\n");
       },
 
       error: function(temp, errorMessage) {
-        $('.dropzone-error-message').text(errorMessage);
-        $('.div-dropzone-error').css('opacity', 0.7);
-        $('.div-dropzone-error').delay(500).fadeTo("slow", 0);
+        $('p.hint.pull-right').after(
+          '<div class="alert alert-danger alert-dismissable div-dropzone-alert">'
+        + '<button type="button" class="close" data-dismiss="alert"' 
+        + 'aria-hidden="true">&times;</button>'
+        + errorMessage + '</div>');
       },
 
       sending: function() {
