@@ -97,10 +97,7 @@ class Projects::IssuesController < Projects::ApplicationController
   end
 
   def upload_image
-    @base_dir = FileUploader.generate_dir
-    upload_path = File.join(repository.path_with_namespace, 'issues', @base_dir)
-    accepted_types = %w(png jpg jpeg gif)
-    uploader = FileUploader.new('uploads', upload_path, accepted_types)
+    uploader = FileUploader.new('uploads', upload_path, accepted_images)
     alt = params['issue-img'].original_filename
     uploader.store!(params['issue-img'])
     link = { 'alt' => File.basename(alt, '.*'),
@@ -137,6 +134,15 @@ class Projects::IssuesController < Projects::ApplicationController
     params[:scope] = 'all' if params[:scope].blank?
     params[:state] = 'opened' if params[:state].blank?
     @issues = IssuesFinder.new.execute(current_user, params.merge(project_id: @project.id))
+  end
+
+  def upload_path
+    base_dir = FileUploader.generate_dir
+    File.join(repository.path_with_namespace, 'issues', base_dir)
+  end
+
+  def accepted_images 
+    %w(png jpg jpeg gif)
   end
 
   # Since iids are implemented only in 6.1
