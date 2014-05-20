@@ -9,7 +9,6 @@
   }
 
   function handlePaste(e) {
-    alert(1);
     filename = getdata(e);
     e = e.originalEvent;
     for (var i = 0; i < e.clipboardData.items.length; i++) {
@@ -20,16 +19,8 @@
     }
   }
 
-  function fillerContent(e){
-    console.log(e);
-    alert(1);
-  }
-
   function uploadFile(item, filename){
-    reader = new FileReader();
-    reader.readAsText(item);
-    console.log(reader.result);
-
+    var image = document.createElement('img');
     var formData = new FormData();
     formData.append('issue-img', item, filename);
 
