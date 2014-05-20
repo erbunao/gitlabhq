@@ -169,12 +169,13 @@ Gitlab::Application.routes.draw do
   #
   # Project Area
   #
-  resources :projects, constraints: { id: /[a-zA-Z.0-9_\-]+\/[a-zA-Z.0-9_\-]+/ }, except: [:new, :create, :index], path: "/" do
+  resources :projects, constraints: { id: /[a-zA-Z.0-9_\-]+\/[a-zA-Z.0-9_\-]+/ }, except: [:new, :create, :index, :upload_image], path: "/" do
     member do
       put :transfer
       post :fork
       post :archive
       post :unarchive
+      post :upload_image
       get :autocomplete_sources
       get :import
       put :retry_import
@@ -300,7 +301,6 @@ Gitlab::Application.routes.draw do
       resources :issues, constraints: {id: /\d+/}, except: [:destroy] do
         collection do
           post  :bulk_update
-          post :upload_image
         end
       end
 
