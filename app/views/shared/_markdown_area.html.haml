@@ -16,10 +16,10 @@
       + '</div>');
 
     dz = $('.div-dropzone').dropzone({
-      url: "#{upload_image_project_issues_path}",
+      url: "#{upload_image_project_path @project}",
       dictDefaultMessage: '',
       clickable: true,
-      paramName: 'issue-img',
+      paramName: 'markdown-img',
       maxFilesize: 10,
       uploadMultiple: false,
       acceptedFiles: 'image/jpg,image/jpeg,image/gif,image/png',

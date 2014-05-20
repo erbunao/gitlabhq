@@ -61,18 +61,6 @@ class Projects::NotesController < Projects::ApplicationController
     render text: view_context.markdown(params[:note])
   end
 
-  def upload_image
-    uploader = FileUploader.new('uploads', upload_path, accepted_images)
-    alt = params['note-img'].original_filename
-    uploader.store!(params['note-img'])
-    link = { 'alt' => File.basename(alt, '.*'),
-             'url' => File.join(root_url, uploader.url) }
-
-    respond_to do |format|
-      format.json { render json: { link: link } }
-    end
-  end
-
   private
 
   def note
@@ -108,14 +96,5 @@ class Projects::NotesController < Projects::ApplicationController
 
   def authorize_admin_note!
     return access_denied! unless can?(current_user, :admin_note, note)
-  end
-
-  def upload_path
-    base_dir = FileUploader.generate_dir
-    File.join(repository.path_with_namespace, 'notes', base_dir)
-  end
-
-  def accepted_images 
-    %w(png jpg jpeg gif)
   end
 end
