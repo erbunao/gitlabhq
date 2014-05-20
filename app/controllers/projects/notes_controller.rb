@@ -70,6 +70,7 @@ class Projects::NotesController < Projects::ApplicationController
 
     respond_to do |format|
       format.json { render json: { link: link } }
+    end
   end
 
   private
