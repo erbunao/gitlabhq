@@ -99,7 +99,6 @@ class Projects::IssuesController < Projects::ApplicationController
   def upload_image
     @base_dir = FileUploader.generate_dir
     upload_path = File.join(repository.path_with_namespace, 'issues', @base_dir)
-    #binding.pry
     accepted_types = %w(png jpg jpeg gif)
     uploader = FileUploader.new('uploads', upload_path, accepted_types)
     alt = params['issue-img'].original_filename
