@@ -93,6 +93,23 @@
       acceptedFiles: 'image/jpg,image/jpeg,image/gif,image/png',
       headers: { 'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
       
+      dragover: function() {
+        $('.div-dropzone > textarea').addClass('div-dropzone-focus');
+        $('.div-dropzone-hover').css('opacity',0.7);
+      },
+
+      dragleave: function() {
+        $('.div-dropzone > textarea').removeClass('div-dropzone-focus');
+        $('.div-dropzone-hover').css('opacity',0);
+      },
+
+      drop: function() {
+        $('.dz-preview').remove();
+        $('.div-dropzone > textarea').removeClass('div-dropzone-focus');
+        $('.div-dropzone-hover').css('opacity',0);
+        $('.div-dropzone > textarea').focus();
+      },
+
       success: function(header, response){
         var child = $(dz[0]).children('textarea');
         $(child).val($(child).val() + formatLink(response.link) + "\n");
@@ -113,21 +130,6 @@
       }
     });
 
-    $('.div-dropzone').on('dragenter',function() {
-      $(this).children('textarea').focus();
-      $('.div-dropzone-hover').css('opacity',0.7);
-    });
-
-    $('body').on('dragover',function() {
-      $('.div-dropzone').children('textarea').blur();
-      $('.div-dropzone-hover').css('opacity',0);
-    });
-
-    $('.div-dropzone').on('drop',function() {
-      $('.dz-preview').remove();  
-      $('.div-dropzone-hover').css('opacity',0);
-    });
-
     $('.markdown-selector').click(function(e) {
       e.preventDefault();
       $('.div-dropzone').click();
@@ -135,8 +137,8 @@
 
     $('.div-dropzone').bind('DOMNodeInserted', function() {
       $('.dz-preview').remove();
+      $('.div-dropzone > textarea').focus();
     });
 
     $('.div-dropzone').on('paste', handlePaste);
-
   });
