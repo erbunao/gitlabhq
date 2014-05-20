@@ -3,7 +3,13 @@
     return '![' + str.alt + '](' + str.url + ')';
   }
 
+  function cleanArea(e){
+    var child = $(dz[0]).children('textarea');
+    init_text = $(child).val();
+  }
+
   function handlePaste(e) {
+    alert(1);
     filename = getdata(e);
     e = e.originalEvent;
     for (var i = 0; i < e.clipboardData.items.length; i++) {
@@ -14,7 +20,16 @@
     }
   }
 
+  function fillerContent(e){
+    console.log(e);
+    alert(1);
+  }
+
   function uploadFile(item, filename){
+    reader = new FileReader();
+    reader.readAsText(item);
+    console.log(reader.result);
+
     var formData = new FormData();
     formData.append('issue-img', item, filename);
 
@@ -26,7 +41,8 @@
 
     xhr.onload = function() {
       if (xhr.status == 200) {
-        alert('Success!');
+        var child = $(dz[0]).children('textarea');
+        $(child).val($(child).val() + formatLink(this.response.link) + "\n");
       }
       else {
         alert('Failed!');
@@ -34,6 +50,7 @@
     };
 
     xhr.open('POST', "#{upload_image_project_issues_path}", true);
+    xhr.responseType = "json";
     xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'));
     xhr.send(formData);
   }
@@ -76,7 +93,7 @@
       acceptedFiles: 'image/jpg,image/jpeg,image/gif,image/png',
       headers: { 'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
       
-      success: function(header,response){
+      success: function(header, response){
         var child = $(dz[0]).children('textarea');
         $(child).val($(child).val() + formatLink(response.link) + "\n");
       },
