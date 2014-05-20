@@ -3,7 +3,7 @@
     return '![' + str.alt + '](' + str.url + ')';
   }
 
-  $(document).ready(function() { 
+  $(document).ready(function() {
     $('textarea.markdown-area').wrap('<div class="div-dropzone"></div>');
     $('.div-dropzone').parent().addClass('div-dropzone-wrapper');
 
@@ -61,9 +61,11 @@
       },
       
       complete: function() {
+        $('.markdown-area').trigger('input');
         $('.div-dropzone-spinner').css('opacity',0);
       }
     });
+
 
     $('.markdown-selector').click(function(e) {
       e.preventDefault();
