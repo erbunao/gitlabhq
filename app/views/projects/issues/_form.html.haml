@@ -59,7 +59,8 @@
       - cancel_path = @issue.new_record? ? project_issues_path(@project) : project_issue_path(@project, @issue)
       = link_to "Cancel", cancel_path, class: 'btn btn-cancel'
 
-= render 'shared/markdown_area' 
+- content_for :js_file do
+  = javascript_include_tag "markdown-area.js.coffee"
 
 :javascript
   $("#issue_label_list")
@@ -95,3 +96,5 @@
     $('#issue_assignee_id').val("#{current_user.id}").trigger("change");
     e.preventDefault();
   });
+
+  var project_image_path_upload = "#{upload_image_project_path @project}"
