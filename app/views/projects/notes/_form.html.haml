@@ -14,10 +14,12 @@
       Write
 
     = f.text_area :note, size: 255, class: 'note_text js-note-text js-gfm-input turn-on markdown-area'
+    %p.hint Comments are parsed with #{link_to "GitLab Flavored Markdown", help_markdown_path, target: '_blank'}.
+    %p.hint.pull-right Attach images (JPG, PNG, GIF) by dragging & dropping or #{link_to "selecting them", '#', class: 'markdown-selector' }.
     .note_preview.js-note-preview.turn-off
 
   .hint
-    .pull-right Comments are parsed with #{link_to "GitLab Flavored Markdown", help_markdown_path, target: '_blank'}.
+    .pull-right 
   .clearfix
 
   .note-form-actions
