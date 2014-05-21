@@ -20,7 +20,7 @@ $(document).ready ->
     acceptedFiles: "image/jpg,image/jpeg,image/gif,image/png"
     headers: 
       "X-CSRF-Token": $("meta[name=\"csrf-token\"]").attr("content")
-   
+
     dragover: ->
       $(".div-dropzone > textarea").addClass "div-dropzone-focus"
       $(".div-dropzone-hover").css "opacity", 0.7
@@ -32,7 +32,6 @@ $(document).ready ->
       return
 
     drop: ->
-      $(".dz-preview").remove()
       $(".div-dropzone > textarea").removeClass "div-dropzone-focus"
       $(".div-dropzone-hover").css "opacity", 0
       $(".div-dropzone > textarea").focus()
@@ -53,6 +52,7 @@ $(document).ready ->
       return
 
     complete: ->
+      $(".dz-preview").remove()
       $(".markdown-area").trigger "input"
       $(".div-dropzone-spinner").css "opacity", 0
       return
@@ -61,11 +61,6 @@ $(document).ready ->
   $(".markdown-selector").click (e) ->
     e.preventDefault()
     $(".div-dropzone").click()
-    return
-
-  $(".div-dropzone").bind "DOMNodeInserted", ->
-    $(".dz-preview").remove()
-    $(".div-dropzone > textarea").focus()
     return
 
   return
