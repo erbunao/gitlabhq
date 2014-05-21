@@ -59,9 +59,6 @@
       - cancel_path = @issue.new_record? ? project_issues_path(@project) : project_issue_path(@project, @issue)
       = link_to "Cancel", cancel_path, class: 'btn btn-cancel'
 
-- content_for :js_file do
-  = javascript_include_tag "markdown-area.js.coffee"
-
 :javascript
   $("#issue_label_list")
     .bind( "keydown", function( event ) {
