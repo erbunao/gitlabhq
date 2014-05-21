@@ -2,12 +2,23 @@ formatLink = (str) ->
   "![" + str.alt + "](" + str.url + ")"
 
 $(document).ready ->
+  alertClass = "alert alert-danger alert-dismissable div-dropzone-alert"
+  alertAttr = "class=\"close\" data-dismiss=\"alert\"" + "aria-hidden=\"true\""
+  divHover = "<div class=\"div-dropzone-hover\"></div>"
+  divSpinner = "<div class=\"div-dropzone-spinner\"></div>"
+  divAlert = "<div class=\"" + alertClass + "\"></div>"
+  iconPicture = "<i class=\"icon-picture div-dropzone-icon\"></i>"
+  iconSpinner = "<i class=\"icon-spinner icon-spin div-dropzone-icon\"></i>"
+  btnAlert = "<button type=\"button\"" + alertAttr + ">&times;</button>"
+
   $("textarea.markdown-area").wrap "<div class=\"div-dropzone\"></div>"  
   
   $(".div-dropzone").parent().addClass "div-dropzone-wrapper"
 
-  $(".div-dropzone").append "<div class=\"div-dropzone-hover\">" + "<i class=\"icon-picture div-dropzone-icon\"></i>" + "</div>"
-  $(".div-dropzone").append "<div class=\"div-dropzone-spinner\">" + "<i class=\"icon-spinner icon-spin div-dropzone-icon\"></i>" + "</div>"
+  $(".div-dropzone").append divHover
+  $(".div-dropzone-hover").append iconPicture
+  $(".div-dropzone").append divSpinner 
+  $(".div-dropzone-spinner").append iconSpinner
 
 
   dropzone = $(".div-dropzone").dropzone(
@@ -32,19 +43,20 @@ $(document).ready ->
       return
 
     drop: ->
+      $(".div-dropzone-alert").alert "close"
       $(".div-dropzone > textarea").removeClass "div-dropzone-focus"
       $(".div-dropzone-hover").css "opacity", 0
       $(".div-dropzone > textarea").focus()
       return
 
     success: (header, response) ->
-      $(".div-dropzone-alert").alert "close"
       child = $(dropzone[0]).children("textarea")
       $(child).val $(child).val() + formatLink(response.link) + "\n"
       return
 
     error: (temp, errorMessage) ->
-      $("p.hint.pull-right").after "<div class=\"alert alert-danger alert-dismissable div-dropzone-alert\">" + "<button type=\"button\" class=\"close\" data-dismiss=\"alert\"" + "aria-hidden=\"true\">&times;</button>" + errorMessage + "</div>"
+      $(".error-alert").append divAlert
+      $(".div-dropzone-alert").append btnAlert + errorMessage
       return
 
     sending: ->
