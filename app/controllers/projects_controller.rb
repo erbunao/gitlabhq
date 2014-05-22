@@ -168,7 +168,6 @@ class ProjectsController < ApplicationController
     uploader.store!(params['markdown-img'])
     link = { 'alt' => File.basename(alt, '.*'),
              'url' => File.join(root_url, uploader.url) }
-
     respond_to do |format|
       format.json { render json: { link: link } }
     end
@@ -181,7 +180,7 @@ class ProjectsController < ApplicationController
     File.join(repository.path_with_namespace, base_dir)
   end
 
-  def accepted_images 
+  def accepted_images
     %w(png jpg jpeg gif)
   end
 
