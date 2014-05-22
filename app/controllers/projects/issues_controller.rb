@@ -60,7 +60,7 @@ class Projects::IssuesController < Projects::ApplicationController
 
   def create
     @issue = Issues::CreateService.new(project, current_user, params[:issue]).execute
-    
+
     respond_to do |format|
       format.html do
         if @issue.valid?
