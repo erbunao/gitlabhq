@@ -10,7 +10,7 @@ module Issues
         issue.create_cross_references!(issue.project, current_user)
         execute_hooks(issue)
       end
-      
+
       issue
     end
   end
