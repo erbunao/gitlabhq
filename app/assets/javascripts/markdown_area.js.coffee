@@ -32,6 +32,8 @@ $(document).ready ->
     headers: 
       "X-CSRF-Token": $("meta[name=\"csrf-token\"]").attr("content")
 
+    previewContainer: false
+
     dragover: ->
       $(".div-dropzone > textarea").addClass "div-dropzone-focus"
       $(".div-dropzone-hover").css "opacity", 0.7
