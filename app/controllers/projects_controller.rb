@@ -164,8 +164,8 @@ class ProjectsController < ApplicationController
 
   def upload_image
     uploader = FileUploader.new('uploads', upload_path, accepted_images)
-    alt = params['markdown-img'].original_filename
-    uploader.store!(params['markdown-img'])
+    alt = params['markdown_img'].original_filename
+    uploader.store!(params['markdown_img'])
     link = { 'alt' => File.basename(alt, '.*'),
              'url' => File.join(root_url, uploader.url) }
     respond_to do |format|

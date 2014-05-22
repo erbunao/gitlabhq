@@ -2,7 +2,7 @@
 class FileUploader < CarrierWave::Uploader::Base
   storage :file
 
-  def initialize(base_dir, path, allowed_extensions = nil)
+  def initialize(base_dir, path = '', allowed_extensions = nil)
     @base_dir = base_dir
     @path = path
     @allowed_extensions = allowed_extensions

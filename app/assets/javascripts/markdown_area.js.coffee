@@ -25,7 +25,7 @@ $(document).ready ->
     url: project_image_path_upload
     dictDefaultMessage: ""
     clickable: true
-    paramName: "markdown-img"
+    paramName: "markdown_img"
     maxFilesize: 10
     uploadMultiple: false
     acceptedFiles: "image/jpg,image/jpeg,image/gif,image/png"
