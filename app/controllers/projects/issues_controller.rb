@@ -60,6 +60,7 @@ class Projects::IssuesController < Projects::ApplicationController
 
   def create
     @issue = Issues::CreateService.new(project, current_user, params[:issue]).execute
+    
     respond_to do |format|
       format.html do
         if @issue.valid?
@@ -129,6 +130,7 @@ class Projects::IssuesController < Projects::ApplicationController
   #
   def redirect_old
     issue = @project.issues.find_by(id: params[:id])
+
     if issue
       redirect_to project_issue_path(@project, issue)
       return
