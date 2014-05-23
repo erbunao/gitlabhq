@@ -35,6 +35,9 @@ $(document).ready ->
 
     previewContainer: false
 
+    processing: ->
+      $(".div-dropzone-alert").alert "close"
+
     dragover: ->
       $(".div-dropzone > textarea").addClass "div-dropzone-focus"
       $(".div-dropzone-hover").css "opacity", 0.7
@@ -46,7 +49,6 @@ $(document).ready ->
       return
 
     drop: ->
-      $(".div-dropzone-alert").alert "close"
       $(".div-dropzone > textarea").removeClass "div-dropzone-focus"
       $(".div-dropzone-hover").css "opacity", 0
       $(".div-dropzone > textarea").focus()
@@ -58,8 +60,10 @@ $(document).ready ->
       return
 
     error: (temp, errorMessage) ->
-      $(".error-alert").append divAlert
-      $(".div-dropzone-alert").append btnAlert + errorMessage
+      checkIfMsgExists = $(".error-alert").children().length
+      if checkIfMsgExists is 0
+        $(".error-alert").append divAlert
+        $(".div-dropzone-alert").append btnAlert + errorMessage
       return
 
     sending: ->
