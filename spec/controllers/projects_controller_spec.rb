@@ -11,7 +11,6 @@ describe ProjectsController do
   describe "POST #upload_image" do
     before do
       sign_in(user)
-      binding.pry
     end
 
     context "without params['markdown_img']" do
@@ -24,7 +23,6 @@ describe ProjectsController do
     context "with invalid file" do
       before do
         post :upload_image, id: project.to_param, markdown_img: @img
-        binding.pry
       end
 
       it "returns an error" do
