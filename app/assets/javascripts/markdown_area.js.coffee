@@ -10,6 +10,7 @@ $(document).ready ->
   iconPicture = "<i class=\"icon-picture div-dropzone-icon\"></i>"
   iconSpinner = "<i class=\"icon-spinner icon-spin div-dropzone-icon\"></i>"
   btnAlert = "<button type=\"button\"" + alertAttr + ">&times;</button>"
+  project_image_path_upload = window.project_image_path_upload or null
 
   $("textarea.markdown-area").wrap "<div class=\"div-dropzone\"></div>"  
   
