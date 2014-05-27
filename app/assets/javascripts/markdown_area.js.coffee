@@ -75,7 +75,7 @@ $(document).ready ->
   handlePaste = (e) ->
     e.preventDefault()
     my_event = e.originalEvent
-    filename = getFilename(my_event)
+    filename = getFilename(my_event) or "image.png"
     appendFilename(filename)
 
     i = 0
@@ -106,7 +106,7 @@ $(document).ready ->
   uploadFile = (item, filename) ->
     formData = new FormData()
     formData.append "markdown_img", item, filename
-
+    console.log filename
     $.ajax
       url: project_image_path_upload
       type: "POST"
