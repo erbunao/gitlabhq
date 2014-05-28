@@ -75,38 +75,53 @@ $(document).ready ->
   handlePaste = (e) ->
     e.preventDefault()
     my_event = e.originalEvent
-    filename = getFilename(my_event) or "image.png"
-    appendFilename(filename)
+    
+    if my_event.clipboardData and my_event.clipboardData.items
+      i = 0
+      console.log my_event.clipboardData.items[0]
+      while i < my_event.clipboardData.items.length
+        item = my_event.clipboardData.items[i]
+        processItem(my_event, item)
+        i++
 
-    i = 0
-    while i < my_event.clipboardData.items.length
-      item = my_event.clipboardData.items[i]
-      if item.type.indexOf("image") isnt -1
-        uploadFile item.getAsFile(), filename
-      i++
-    return
+  processItem = (e, item) ->
+    console.log e.clipboardData.items.length
+    console.log isImage(item)
+    if isImage(item)
+      filename = getFilename(e) or "image.png"
+      text = "{{" + filename + "}}"
+      pasteText(text)
+      uploadFile item.getAsFile(), filename
+    else if e.clipboardData.items.length == 1
+      text = e.clipboardData.getData("text/plain")
+      pasteText(text)
 
-  appendFilename = (filename) ->
+  isImage = (item) ->
+    if item
+      item.type.indexOf("image") isnt -1
+
+  pasteText = (text) ->
     caretStart = $(child)[0].selectionStart
     caretEnd = $(child)[0].selectionEnd
     textEnd = $(child).val().length
 
     beforeSelection = $(child).val().substring 0, caretStart
     afterSelection = $(child).val().substring caretEnd, textEnd
-    $(child).val beforeSelection + "{{" + filename + "}}" + afterSelection
+    $(child).val beforeSelection + text + afterSelection
+    $(".markdown-area").trigger "input"
 
   getFilename = (e) -> 
     if window.clipboardData and window.clipboardData.getData
       value = window.clipboardData.getData("Text")
     else if e.clipboardData and e.clipboardData.getData
-      value = e.clipboardData.getData("text")
+      value = e.clipboardData.getData("text/plain")
+    
     value = value.split("\r")
-    return value.first()
+    value.first()
 
   uploadFile = (item, filename) ->
     formData = new FormData()
     formData.append "markdown_img", item, filename
-    console.log filename
     $.ajax
       url: project_image_path_upload
       type: "POST"
